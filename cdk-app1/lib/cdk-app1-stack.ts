@@ -1,16 +1,17 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import { Bucket } from "aws-cdk-lib/aws-s3";
 
 export class CdkApp1Stack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'CdkApp1Queue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+    // s3 bucket using L2 construct
+    const bucketL2 = new Bucket(this, 'L2Bucket', {
+      lifecycleRules: [{
+        expiration: cdk.Duration.days(2)
+      }]
+    });
   }
 }
