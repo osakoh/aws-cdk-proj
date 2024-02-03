@@ -1,4 +1,4 @@
-import * as cdk from "aws-cdk-lib";
+import { CfnOutput, Stack, Duration, StackProps } from "aws-cdk-lib";
 import { Construct } from "constructs";
 import { Bucket, CfnBucket } from "aws-cdk-lib/aws-s3";
 
@@ -12,7 +12,7 @@ class L3Bucket extends Construct {
     this.bucket = new Bucket(this, "L3Bucket", {
       lifecycleRules: [
         {
-          expiration: cdk.Duration.days(expiration),
+          expiration: Duration.days(expiration),
         },
       ],
     });
@@ -24,8 +24,8 @@ class L3Bucket extends Construct {
   }
 }
 
-export class CdkApp1Stack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+export class CdkApp1Stack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     // s3 bucket using L1 construct
@@ -41,7 +41,7 @@ export class CdkApp1Stack extends cdk.Stack {
     });
 
     // Output for L1 bucket
-    new cdk.CfnOutput(this, "L1BucketName", {
+    new CfnOutput(this, "L1BucketName", {
       value: bucketL1.ref, // the `ref` property for L1 (CfnBucket) bucket name
       description: "L1: Bucket name created using L1 construct",
     });
@@ -50,13 +50,13 @@ export class CdkApp1Stack extends cdk.Stack {
     const bucketL2 = new Bucket(this, "L2Bucket", {
       lifecycleRules: [
         {
-          expiration: cdk.Duration.days(2),
+          expiration: Duration.days(2),
         },
       ],
     });
 
     // Output for L2 bucket
-    new cdk.CfnOutput(this, "L2BucketName", {
+    new CfnOutput(this, "L2BucketName", {
       value: bucketL2.bucketName,
       description: "L2: Bucket name created using L2 construct",
     });
@@ -65,7 +65,7 @@ export class CdkApp1Stack extends cdk.Stack {
     const bucketL3 = new L3Bucket(this, "L3Bucket", 3);
 
     // Output for L3 bucket using the exposed bucket name
-    new cdk.CfnOutput(this, "L3BucketName", {
+    new CfnOutput(this, "L3BucketName", {
       value: bucketL3.bucketNameL3,
       description: "L3: Bucket name created using L3 construct",
     });
